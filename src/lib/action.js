@@ -146,7 +146,7 @@ export const saveLocationAction = async (id, email) => {
 
         revalidatePath('/saved')
         revalidatePath('/explore')
-        revalidatePath('explore/[id]')
+        revalidatePath('/explore/[id]')
 
     } catch (error) {
         console.log(error)
@@ -155,10 +155,10 @@ export const saveLocationAction = async (id, email) => {
 
 export const deleteLocation = async (locationId) => { 
     try { 
-        console.log(locationId, "in action js")
+
         await removeLocation(locationId)
         await deleteReviewByLocation(locationId)
-    } catch { 
-        console.log("error in action.js with delete")
+    } catch (error) { 
+        console.log(error)
     }
 }

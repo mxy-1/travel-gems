@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema({
     img: {
         type: String
     },
-    saved_locations: {
-        type: Array
-    },
+    // saved_locations: {
+    //     type: Array
+    // },
     isAdmin: {
         type: Boolean,
         default: false

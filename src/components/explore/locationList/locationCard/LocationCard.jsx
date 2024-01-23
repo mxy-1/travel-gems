@@ -4,7 +4,7 @@ import Link from 'next/link'
 import SaveLocation from '@/components/saveLocation/SaveLocation'
 import { CiShoppingTag } from "react-icons/ci";
 
-const LocationCard = ({location, user, setPageLocations}) => {
+const LocationCard = ({location, user}) => {
 
     let roundedRating;
     if (location.rating) {
@@ -40,7 +40,7 @@ const LocationCard = ({location, user, setPageLocations}) => {
                                 </button>
                             ))}
                     </div>
-                    {user && <SaveLocation id={location._id.toString()} user={user} setPageLocations={setPageLocations} />}
+                    {user && <SaveLocation id={location._id.toString()} user={user}/>}
                 </div>
             </div>
         </div>

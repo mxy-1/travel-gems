@@ -8,8 +8,8 @@ const Home = async () => {
   const session = await auth()
   // let user;
 
-  const user = await getUserByEmail(session?.user.email)
-
+  let user = await getUserByEmail(session?.user.email)
+  user = JSON.parse(JSON.stringify(user))
 
   // FETCHING WITHOUT API
   let allLocations = await getLocations();

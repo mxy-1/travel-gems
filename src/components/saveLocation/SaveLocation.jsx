@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { MdBookmarkAdd } from "react-icons/md";
 import { MdBookmarkRemove } from "react-icons/md";
 
-const SaveLocation = ({id, user, setPageLocations}) => {
+const SaveLocation = ({id, user}) => {
     const [isSaved, setIsSaved] = useState(user?.savedLocations.includes(id))
     const [error, setError] = useState(false)
     
@@ -17,11 +17,6 @@ const SaveLocation = ({id, user, setPageLocations}) => {
         try {
             await saveLocationAction(id, user.email);
             setIsSaved((prev) => {return !prev})
-            if (setPageLocations) {
-                // setPageLocations((prev) => {
-                //     return prev.filter(function(e) { return e._id !== id })
-                // })
-            }
         } catch (error) {
             console.log(error)
             setError(true)
