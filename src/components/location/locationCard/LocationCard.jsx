@@ -6,9 +6,6 @@ import { deleteLocation } from "@/lib/action"
 
 
 const LocationCard = async ({ location, user }) => {
-
-    const roundedRating = location.rating.toFixed(2)
-
     const locationId = location._id
 
     const handleDelete = async (locationId) => {
@@ -55,7 +52,7 @@ const LocationCard = async ({ location, user }) => {
 
                     <div className="flex flex-col justify-evenly gap-4 sm:flex-row sm:gap-8">
                         {location.categories.map(category => (
-                            <p className="badge badge-neutral ">
+                            <p className="badge badge-neutral" key={category}>
                                 <em>{category} </em>
                             </p>
                         ))}
