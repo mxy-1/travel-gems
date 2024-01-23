@@ -34,7 +34,7 @@ const ExplorePage = ({ allLocations, user }) => {
 
         }
 
-        setLocations(filteredLocations)
+        setLocations(JSON.parse(JSON.stringify(filteredLocations)))
 
     }, [filterOptions])
 

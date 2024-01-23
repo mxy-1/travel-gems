@@ -15,7 +15,8 @@ const SavedPage = async () => {
     }
 
     // Get locations by id in savedLocations
-    const locations = await getSavedLocations(user.savedLocations);
+    let locations = await getSavedLocations(user.savedLocations);
+    locations = JSON.parse(JSON.stringify(locations))
 
     return (
         <main className={styles.container}>

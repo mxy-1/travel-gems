@@ -5,8 +5,9 @@ import { getUserByEmail } from "@/lib/data";
 const AddNewLocation = async () => {
     // Get logged in user
     const session = await auth()
-    const user = await getUserByEmail(session?.user.email)
-
+    let user = await getUserByEmail(session?.user.email)
+    user = JSON.parse(JSON.stringify(user))
+    
     return (
         <main>
             <NewLocationForm user={user} />

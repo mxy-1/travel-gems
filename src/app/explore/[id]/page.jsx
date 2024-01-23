@@ -9,11 +9,11 @@ const SingleLocationPage = async ({ params }) => {
     const id = params.id
     const session = await auth()
   
-    const user = await getUserByEmail(session?.user.email)
-
+    let user = await getUserByEmail(session?.user.email)
+    user = JSON.parse(JSON.stringify(user))
 
     let location = await getLocationById(id)
-    location = location[0]
+    location = JSON.parse(JSON.stringify(location[0]))
 
     return (
         <>
