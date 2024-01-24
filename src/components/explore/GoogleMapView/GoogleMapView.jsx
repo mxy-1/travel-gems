@@ -8,7 +8,7 @@ import { LiaLocationArrowSolid } from "react-icons/lia"
 import { calculateDistance } from '@/lib/distance';
 
 
-const GoogleMapView = ({ user, locations, addLocation,setAddLocation, selectedLocation, setSelectedLocation }) => {
+const GoogleMapView = ({ user, locations, addLocation, setAddLocation, selectedLocation, setSelectedLocation }) => {
     const [mapCoords, setMapCoords] = useState({ lat: 51.507351, lng: -0.127758 })
     const [coordinates, setCoordinates] = useState({});
     const [selectLocation, setSelectLocation] = useState("");
@@ -129,11 +129,11 @@ const GoogleMapView = ({ user, locations, addLocation,setAddLocation, selectedLo
                             <div className={style.popText}>
 
                                 <Link href={`/explore/${selectLocation._id}`}>
-                                    <h4>{selectLocation.place_name}</h4>
+                                    <h4><strong>{selectLocation.place_name}</strong></h4>
                                 </Link>
                                 <p>{selectLocation.category}</p>
                                 <p> {`${stringLimit(selectLocation.description, 100)}...`}</p>
-                               {geoLocation && <p className={style.directions} onClick={handleDirectionsClick}>
+                                {geoLocation && <p className={style.directions} onClick={handleDirectionsClick}>
                                     <LiaLocationArrowSolid /> {distance} mi</p>}
                             </div>
                         </div>

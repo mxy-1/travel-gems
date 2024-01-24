@@ -1,11 +1,10 @@
 "use client"
 import { submitLocation } from '@/lib/action';
-import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
+import { LoadScript, StandaloneSearchBox, useLoadScript } from '@react-google-maps/api';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
 import Select from 'react-select';
 
-const libraries = ['places']
 
 const NewLocationForm = ({ user }) => {
     const [placeName, setPlaceName] = useState("");
@@ -37,30 +36,16 @@ const NewLocationForm = ({ user }) => {
         { value: 'Entertainment', label: 'Entertainment' }
     ]
 
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+    const [ libraries ] = useState(['places'])
 
-    // useEffect(() => {
-    //     const fetchCoordinates = async () => {
-    //         const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-    //         const address = '24%20Sussex%20Drive%20Ottawa%20ON'; // URL-encoded address
-    //         const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
-
-    //         try {
-    //             const response = await fetch(url);
-    //             const formatRes = await response.json();
-    //             const location = formatRes.results[0].geometry.location;
-    //         } catch (error) {
-    //             console.error("Error fetching coordinates: ", error);
-    //         }
-    //     };
-
-    //     fetchCoordinates();
-    // }, []);
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+        libraries,
+    });
 
     useEffect(() => {
         const fetchAddress = async () => {
-            const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`;
             try {
                 if (latitude) {
                     const response = await fetch(url);
@@ -139,66 +124,66 @@ const NewLocationForm = ({ user }) => {
                     <figure>{img && <img className='w-full h-full object-cover' src={img} />}</figure>
                     <div className="card-body">
                         <h2 className="card-title text-2xl">New gem</h2>
-                            <form onSubmit={handleSubmit}>
-                                
-                                <div className='flex flex-col gap-2'>
+                        <form onSubmit={handleSubmit}>
 
-                                    <div className='flex flex-col lg:flex-row gap-5 '>
-                                        <div className='join join-vertical w-full'>
-                                            <label htmlFor="place-name" className='bg-indigo-300 w-full  join-item p-2'>Place name:</label>
-                                            <input value={placeName} onChange={e => setPlaceName(e.target.value)} type="text" id="place-name" placeholder="Name your Gem.." className="input input-bordered w-full  rounded-t-none "/><br />
-                                        </div>
+                            <div className='flex flex-col gap-2'>
 
-                                        <div className='join join-vertical w-full'>
-                                            <label htmlFor="location" className='bg-indigo-300 w-full  join-item p-2'>Location:</label>
-                                            
-                                            {latitude ?
-                                                <input value={location} type="text" id="location" disabled />
-                                                :
-                                                <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY} libraries={libraries}>
-                                                <StandaloneSearchBox onLoad={ref => (inputRef.current = ref)} onPlacesChanged={handlePlaceChanged}>
-                                                    <input type='text' placeholder='Enter location' className="input input-bordered w-full  rounded-t-none"/>
-                                                </StandaloneSearchBox>
-                                                </LoadScript>}
-                                        </div>
+                                <div className='flex flex-col lg:flex-row gap-5 '>
+                                    <div className='join join-vertical w-full'>
+                                        <label htmlFor="place-name" className='bg-indigo-300 w-full  join-item p-2'>Place name:</label>
+                                        <input value={placeName} onChange={e => setPlaceName(e.target.value)} type="text" id="place-name" placeholder="Name your Gem.." className="input input-bordered w-full  rounded-t-none " /><br />
                                     </div>
 
+                                    <div className='join join-vertical w-full'>
+                                        <label htmlFor="location" className='bg-indigo-300 w-full  join-item p-2'>Location:</label>
 
-                                    <div className='join join-vertical'>
-                                        <p className='bg-indigo-300 join-item p-2'>Categories:</p>
-
-                                        <div className="card bg-base-100 shadow-xl join-item p-2">
-                                                <Select
-                                                    isMulti
-                                                    name="categories"
-                                                    options={categoryOptions}
-                                                    onChange={handleCategoryChange}
-                                                    classNamePrefix="select"
-                                                />    
-                                        </div>
-
-                                    </div>
-
-                                    <div className='join join-vertical'>
-                                        <label htmlFor="description" className='bg-indigo-300 join-item p-2'>Description:</label>
-                                        <textarea value={description} onChange={e => setDescription(e.target.value)} id="description" placeholder="a brief description of your gem.." className="textarea w-full rounded-t-none"></textarea><br />
-                                    </div>
-
-                                    <div className='join join-vertical'>
-                                        <label htmlFor="image" className='bg-indigo-300 join-item p-2'>Upload an image:</label>
-                                        <input type="file" id="image" name="image" accept='image/*' onChange={handleFileChange} className="file-input max-w-x rounded-t-none"/><br />
+                                        {latitude ?
+                                            <input value={location} type="text" id="location" disabled />
+                                            :
+                                            isLoaded &&
+                                            <StandaloneSearchBox onLoad={ref => (inputRef.current = ref)} onPlacesChanged={handlePlaceChanged}>
+                                                <input type='text' placeholder='Enter location' className="input input-bordered w-full  rounded-t-none" />
+                                            </StandaloneSearchBox>
+                                        }
                                     </div>
                                 </div>
-                                
-                                <div className="card-actions justify-end">
-                                    <button type='submit' className="btn btn-primary ">Add new location</button>
+
+
+                                <div className='join join-vertical'>
+                                    <p className='bg-indigo-300 join-item p-2'>Categories:</p>
+
+                                    <div className="card bg-base-100 shadow-xl join-item p-2">
+                                        <Select
+                                            isMulti
+                                            name="categories"
+                                            options={categoryOptions}
+                                            onChange={handleCategoryChange}
+                                            classNamePrefix="select"
+                                        />
+                                    </div>
+
                                 </div>
-                            </form>
+
+                                <div className='join join-vertical'>
+                                    <label htmlFor="description" className='bg-indigo-300 join-item p-2'>Description:</label>
+                                    <textarea value={description} onChange={e => setDescription(e.target.value)} id="description" placeholder="a brief description of your gem.." className="textarea w-full rounded-t-none"></textarea><br />
+                                </div>
+
+                                <div className='join join-vertical'>
+                                    <label htmlFor="image" className='bg-indigo-300 join-item p-2'>Upload an image:</label>
+                                    <input type="file" id="image" name="image" accept='image/*' onChange={handleFileChange} className="file-input max-w-x rounded-t-none" /><br />
+                                </div>
+                            </div>
+
+                            <div className="card-actions justify-end">
+                                <button type='submit' className="btn btn-primary ">Add new location</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        
-            
+
+
         </>
     )
 }
