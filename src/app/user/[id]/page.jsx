@@ -6,12 +6,17 @@ import Reviews from "@/components/profile/reviews/Reviews"
 const SingleUserPage = async ({ params }) => {
     console.log(params, " ----------- params")
     const id = params.id
-
-    let user = await getUserById(id)
-    user = user
-    const userReviews = await getReviewsById(id)
-    const locations = await getLocationsByUsername(user.username)
-
+    let userReviews = []
+    let locations = []
+    let user
+    
+    if (id) {
+        user = await getUserById(id)
+        // user = user
+        userReviews = await getReviewsById(id)
+        locations = await getLocationsByUsername(user.username)    
+    }
+   
     return (
         <main className={styles.container}>
 
