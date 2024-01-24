@@ -2,6 +2,7 @@ import styles from './header.module.css'
 import { handleLogout } from '@/lib/action';
 import { auth } from '@/lib/auth';
 import NavLink from '../navbar/links/navlink/NavLink';
+import Link from 'next/link';
 
 const Header = async () => {
 
@@ -12,7 +13,7 @@ const Header = async () => {
         <div className={styles.container}>
             <div className={styles.heading}>
                 <img className={styles.logo} src="../travel_logo.png" alt="travel gems logo" />
-                <img className= {styles.header} src="../travel_header_new.png" alt="travel gems logo" />
+                <Link href="/explore"><img className= {styles.header} src="../travel_header_new.png" alt="travel gems logo" /></Link>
             </div>
             <div className={styles.auth}>
                 {!session ?
