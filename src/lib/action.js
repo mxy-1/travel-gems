@@ -9,8 +9,9 @@ import { addSavedLocation, deleteOneReview, deleteSavedLocation, getLocationById
 import { voteForReview, postReview } from './data';
 import { revalidatePath } from "next/cache";
 
+
 export const handleGithubLogin = async () => {
-    await signIn("github", {callbackUrl: "/explore"})
+    await signIn("github", { callbackUrl: "/explore" })
 }
 
 export const handleLogout = async () => {
@@ -20,22 +21,22 @@ export const handleLogout = async () => {
 export const register = async (previousState, formData) => {
     const { username, email, password, img, passwordRepeat } = Object.fromEntries(formData)
     if (password !== passwordRepeat) {
-        return {error: "Passwords do not match"}
+        return { error: "Passwords do not match" }
     }
 
     try {
         connectToDatabase()
 
-        const usernameUser = await Users.findOne({username})
+        const usernameUser = await Users.findOne({ username })
 
         if (usernameUser) {
-            return {error: "Username already exists"}
+            return { error: "Username already exists" }
         }
 
-        const emailUser = await Users.findOne({email})
+        const emailUser = await Users.findOne({ email })
 
         if (emailUser) {
-            return {error: "Email is already used"}
+            return { error: "Email is already used" }
         }
 
         const salt = await bcrypt.genSalt(10)
@@ -50,20 +51,19 @@ export const register = async (previousState, formData) => {
         })
 
         await newUser.save();
-        return {success: true}
+        return { success: true }
     } catch (err) {
         console.log(err)
-        return  { error: "Something went wrong"}
+        return { error: "Something went wrong" }
     }
 }
 
 export const login = async (previousState, formData) => {
-    const { username, password} = Object.fromEntries(formData)
+    const { username, password } = Object.fromEntries(formData)
 
     try {
         await signIn("credentials", {username, password})
     } catch (err) {
-        
         if (err.type === "CredentialsSignin") {
             return {error: "Invalid username or password"}
         }
@@ -115,11 +115,11 @@ export const submitLocation = async (formData) => {
     }
 };
 
-export const deleteReview = async ({reviewId, locationId}) => { 
-    try { 
+export const deleteReview = async ({ reviewId, locationId }) => {
+    try {
         const deletedReview = await deleteOneReview(reviewId)
-        const removedReviewIdLocation = await removeReviewFromLocation(reviewId, locationId)    
-    } catch { 
+        const removedReviewIdLocation = await removeReviewFromLocation(reviewId, locationId)
+    } catch {
         console.log(error, "error in deleteReview")
     }
 };
@@ -129,8 +129,8 @@ export const handleVoting = async (reviewId) => {
         const updatedReview = await voteForReview(reviewId);
         return updatedReview
     } catch (error) {
-      console.log(error);
-      
+        console.log(error);
+
     }
 };
 
@@ -138,7 +138,7 @@ export const handleVoting = async (reviewId) => {
 export const saveLocationAction = async (id, email) => {
     const user = await getUserByEmail(email)
     try {
-        if (user.savedLocations.includes(id)){
+        if (user.savedLocations.includes(id)) {
             await deleteSavedLocation(id, user)
         } else {
             await addSavedLocation(id, user)
@@ -153,12 +153,12 @@ export const saveLocationAction = async (id, email) => {
     }
 }
 
-export const deleteLocation = async (locationId) => { 
-    try { 
+export const deleteLocation = async (locationId) => {
+    try {
 
         await removeLocation(locationId)
         await deleteReviewByLocation(locationId)
-    } catch (error) { 
+    } catch (error) {
         console.log(error)
     }
 }
