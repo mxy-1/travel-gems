@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export const connectToDatabase = async () => {
   try {
     console.log(typeof process.env.MONGODB_URI_DEV)
-    await mongoose.connect(process.env.MONGODB_URI_DEV, { useNewUrlParser: true, useUnifiedTopology: true, })
+    await mongoose.connect(process.env.MONGODB_URI_DEV, {autoIndex: true, useNewUrlParser: true, useUnifiedTopology: true, })
     console.log("connected to mongodb")
     
   } catch (error) {
