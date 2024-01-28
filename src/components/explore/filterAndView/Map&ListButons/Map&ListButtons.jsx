@@ -1,6 +1,3 @@
-import styles from "./MapAndListButton.module.css"
-
-
 const MapAndListButtons = ({mapView, setMapView}) => { 
 
     const handleClick = () => {

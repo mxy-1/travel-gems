@@ -4,7 +4,6 @@ import Locations from "@/components/profile/Locations/Locations"
 import Reviews from "@/components/profile/reviews/Reviews"
 
 const SingleUserPage = async ({ params }) => {
-    console.log(params, " ----------- params")
     const id = params.id
     let userReviews = []
     let locations = []

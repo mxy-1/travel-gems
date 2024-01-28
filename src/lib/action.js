@@ -4,9 +4,7 @@ import { Users } from "@/models/users";
 import { signIn, signOut } from "./auth";
 import { connectToDatabase } from "./db";
 import bcrypt from 'bcryptjs'
-import { deleteReviewByLocation, postLocation, removeLocation } from "./data";
-import { addSavedLocation, deleteOneReview, deleteSavedLocation, getLocationById, getUserByEmail, removeReviewFromLocation, updateLocationWithReviewId } from "./data";
-import { voteForReview, postReview } from './data';
+import { deleteReviewByLocation, postLocation, removeLocation, voteForReview, addSavedLocation, deleteOneReview, deleteSavedLocation, getLocationById, getUserByEmail, removeReviewFromLocation, updateLocationWithReviewId, postReview } from "./data";
 import { revalidatePath } from "next/cache";
 
 
@@ -62,10 +60,10 @@ export const login = async (previousState, formData) => {
     const { username, password } = Object.fromEntries(formData)
 
     try {
-        await signIn("credentials", {username, password})
+        await signIn("credentials", { username, password })
     } catch (err) {
         if (err.type === "CredentialsSignin") {
-            return {error: "Invalid username or password"}
+            return { error: "Invalid username or password" }
         }
         throw err;
     }

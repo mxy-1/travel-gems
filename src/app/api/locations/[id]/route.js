@@ -1,6 +1,5 @@
 import { getLocationById } from "@/lib/data"
 import { connectToDatabase } from "@/lib/db"
-import { Locations } from "@/models/locations"
 import { NextResponse } from "next/server"
 
 export const GET = async (request, { params }) => {

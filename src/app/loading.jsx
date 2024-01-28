@@ -1,5 +1,3 @@
-import styles from './page.module.css'
-
 const Loading = () => {
     return (
         <main className="grid h-screen place-items-center">
