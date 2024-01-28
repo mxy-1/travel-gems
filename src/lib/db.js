@@ -19,7 +19,9 @@ export const connectToDatabase = async () => {
       return global.mongoose.conn;
     } else {
       promise = mongoose.connect(getMongoUri(), {
-        autoIndex: true
+        autoIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
       });
     }
 
