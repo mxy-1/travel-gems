@@ -1,17 +1,20 @@
 "use client"
 import { submitLocation } from '@/lib/action';
-import { LoadScript, StandaloneSearchBox, useLoadScript } from '@react-google-maps/api';
-import { useSearchParams } from 'next/navigation';
+import { StandaloneSearchBox, useLoadScript } from '@react-google-maps/api';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
 import Select from 'react-select';
 
 
 const NewLocationForm = ({ user }) => {
+    const router = useRouter()
     const [placeName, setPlaceName] = useState("");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
     const [categories, setCategories] = useState([]);
     const [img, setImg] = useState("");
+    const [error, setError] = useState(null);
+    const [fileSize, setFileSize] = useState(0);
 
     let latitude
     let longitude
@@ -36,7 +39,7 @@ const NewLocationForm = ({ user }) => {
         { value: 'Entertainment', label: 'Entertainment' }
     ]
 
-    const [ libraries ] = useState(['places'])
+    const [libraries] = useState(['places'])
 
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
@@ -62,8 +65,9 @@ const NewLocationForm = ({ user }) => {
     }, [latitude, longitude]);
 
 
-    const handleSubmit = () => {
+    const handleSubmit = async (e) => {
         // find the address from the lat and lon
+        e.preventDefault()
         const data = {
             created_by: username,
             categories: ["Scenic"],
@@ -77,14 +81,19 @@ const NewLocationForm = ({ user }) => {
         }
 
         try {
-            submitLocation(data)
+            const id = await submitLocation(data)
+            setError(null)
             setPlaceName("")
             setLocation("")
             setDescription("")
             setCategories([])
             setImg("")
-        } catch {
-            throw new Error("Could not add new location")
+            setFileSize(0)
+            router.push("/explore/" + id)
+
+        } catch (error) {
+            setError("*Could not add new location.")
+           
         }
     }
 
@@ -98,7 +107,9 @@ const NewLocationForm = ({ user }) => {
     //convert to base64 Strings, allows upload of small images
     const handleFileChange = (e) => {
         const reader = new FileReader()
+        setFileSize(Math.round(e.target.files[0].size/1000))
         reader.readAsDataURL(e.target.files[0])
+        
         reader.onload = () => {
             setImg(reader.result)
         }
@@ -110,13 +121,15 @@ const NewLocationForm = ({ user }) => {
     const inputRef = useRef()
 
     const handlePlaceChanged = () => {
-        const [place] = inputRef.current.getPlaces()
-        if (place) {
+        const places = inputRef.current.getPlaces()
+        if (places) {
+            const place = places[0]
             setLocation(place.formatted_address)
             latitude = place.geometry.location.lat()
             longitude = place.geometry.location.lng()
         }
     }
+
     return (
         <>
             <div>
@@ -131,7 +144,7 @@ const NewLocationForm = ({ user }) => {
                                 <div className='flex flex-col lg:flex-row gap-5 '>
                                     <div className='join join-vertical w-full'>
                                         <label htmlFor="place-name" className='bg-indigo-300 w-full  join-item p-2'>Place name:</label>
-                                        <input value={placeName} onChange={e => setPlaceName(e.target.value)} type="text" id="place-name" placeholder="Name your Gem.." className="input input-bordered w-full  rounded-t-none " /><br />
+                                        <input required value={placeName} onChange={e => setPlaceName(e.target.value)} type="text" id="place-name" placeholder="Name your Gem.." className="input input-bordered w-full  rounded-t-none " /><br />
                                     </div>
 
                                     <div className='join join-vertical w-full'>
@@ -142,7 +155,7 @@ const NewLocationForm = ({ user }) => {
                                             :
                                             isLoaded &&
                                             <StandaloneSearchBox onLoad={ref => (inputRef.current = ref)} onPlacesChanged={handlePlaceChanged}>
-                                                <input type='text' placeholder='Enter location' className="input input-bordered w-full  rounded-t-none" />
+                                                <input required type='text' placeholder='Enter location' className="input input-bordered w-full  rounded-t-none" />
                                             </StandaloneSearchBox>
                                         }
                                     </div>
@@ -154,6 +167,7 @@ const NewLocationForm = ({ user }) => {
 
                                     <div className="card bg-base-100 shadow-xl join-item p-2">
                                         <Select
+                                            required
                                             isMulti
                                             name="categories"
                                             options={categoryOptions}
@@ -166,7 +180,7 @@ const NewLocationForm = ({ user }) => {
 
                                 <div className='join join-vertical'>
                                     <label htmlFor="description" className='bg-indigo-300 join-item p-2'>Description:</label>
-                                    <textarea value={description} onChange={e => setDescription(e.target.value)} id="description" placeholder="a brief description of your gem.." className="textarea w-full rounded-t-none"></textarea><br />
+                                    <textarea value={description} onChange={e => setDescription(e.target.value)} id="description" placeholder="A brief description of your gem.." className="textarea w-full rounded-t-none"></textarea><br />
                                 </div>
 
                                 <div className='join join-vertical'>
@@ -174,7 +188,10 @@ const NewLocationForm = ({ user }) => {
                                     <input type="file" id="image" name="image" accept='image/*' onChange={handleFileChange} className="file-input max-w-x rounded-t-none" /><br />
                                 </div>
                             </div>
-
+                            <p>*Max. image size: 770KB</p>
+                            {fileSize > 0 && <p>Current image size: {fileSize} KB</p>}
+                            {fileSize > 770 && <p>*Image too large. Please remove the image or select another.</p>}
+                            <p>{error && error}</p>
                             <div className="card-actions justify-end">
                                 <button type='submit' className="btn btn-primary ">Add new location</button>
                             </div>

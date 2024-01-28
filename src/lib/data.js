@@ -258,3 +258,4 @@ export const removeLocation = async (locationId) => {
             console.log("error with delete reviews by location id")
         }
 }
+

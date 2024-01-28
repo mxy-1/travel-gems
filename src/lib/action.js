@@ -108,9 +108,10 @@ export const submitReview = async (formData) => {
 
 export const submitLocation = async (formData) => {
     try {
-        await postLocation(formData)
+        const newLocation = await postLocation(formData)
+        return JSON.parse(JSON.stringify(newLocation._id))
     } catch (error) {
-        console.log(error, "error")
+        console.log(error, "this is the error")
         throw new Error("Failed to post location")
     }
 };
@@ -162,3 +163,4 @@ export const deleteLocation = async (locationId) => {
         console.log(error)
     }
 }
+
