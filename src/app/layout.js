@@ -8,7 +8,7 @@ import { SessionProvider } from 'next-auth/react'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'TravelGems',
+  title: 'Travel Gems',
   description: 'Find hidden gems near you',
   icons:{
     icon:['./favicon_folder/favicon.ico?v=4'],
