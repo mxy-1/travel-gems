@@ -53,32 +53,32 @@ export const authOptions = {
             }
         })
     ],
-    callbacks: {
-        async signIn({user, account, profile}) {
-            if (account.provider === 'github') {
-                connectToDatabase();
+    // callbacks: {
+    //     async signIn({user, account, profile}) {
+    //         if (account.provider === 'github') {
+    //             connectToDatabase();
 
-                try {
-                    const user = await Users.findOne({email: profile.email})
+    //             try {
+    //                 const user = await Users.findOne({email: profile.email})
 
-                    if (!user) {
-                        const newUser = new Users({
-                            username: profile.login,
-                            email: profile.email,
-                            img: profile.avatar_url,
-                        })
+    //                 if (!user) {
+    //                     const newUser = new Users({
+    //                         username: profile.login,
+    //                         email: profile.email,
+    //                         img: profile.avatar_url,
+    //                     })
 
-                        await newUser.save();
-                    }
-                } catch (err) {
-                    console.log(err)
-                    return false
-                }
-            }
-            return true
-        },
-        ...authConfig.callbacks
-    }
+    //                     await newUser.save();
+    //                 }
+    //             } catch (err) {
+    //                 console.log(err)
+    //                 return false
+    //             }
+    //         }
+    //         return true
+    //     },
+    //     ...authConfig.callbacks
+    // }
 }
 
 export const nextAuth = NextAuth(authOptions)
