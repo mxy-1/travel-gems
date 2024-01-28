@@ -38,10 +38,10 @@ export const authOptions = {
     ...authConfig,
     providers: 
     [ 
-        GitHub({ 
-            clientId: process.env.GITHUB_ID, 
-            clientSecret: process.env.GITHUB_SECRET 
-        }),
+        // GitHub({ 
+        //     clientId: process.env.GITHUB_ID, 
+        //     clientSecret: process.env.GITHUB_SECRET 
+        // }),
         CredentialsProvider({
             async authorize(credentials) {
                 try {
