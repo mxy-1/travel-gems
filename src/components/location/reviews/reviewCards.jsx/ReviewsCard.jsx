@@ -56,7 +56,7 @@ const ReviewsCard = ({ review , userID , username, user }) => {
         </div>
         <div className="stat px-1">
           <div className="stat-title text-xs lg:text-base">posted at</div>
-          <div className="stat-value text-xs lg:text-base">{review.createdAt ? review.createdAt.toLocaleDateString() : "04/01/2024"}</div>
+          <div suppressHydrationWarning={true} className="stat-value text-xs lg:text-base">{review.createdAt ? review.createdAt.toLocaleDateString() : "04/01/2024"}</div>
         </div>
         <div className="stat px-1">
           <div className="stat-title text-xs lg:text-base">votes</div>
