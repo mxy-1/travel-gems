@@ -23,6 +23,8 @@ export const connectToDatabase = async () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
+      console.log(typeof promise, "type???")
+      console.log(promise, "The promise")
     }
 
     global.mongoose = {
