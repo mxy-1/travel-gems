@@ -21,7 +21,7 @@ const LoginForm = () => {
             <input type="password" placeholder="password" name="password"/>
             <button>Login</button>
             {state?.error}
-            <Link href="/register">Don't have an account? <b>Register</b></Link>
+            <Link href="/register">Don&apos;t have an account? <b>Register</b></Link>
         </form>
     )
 }

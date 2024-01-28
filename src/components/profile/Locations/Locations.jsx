@@ -11,7 +11,7 @@ const Locations = ({ locations }) => {
                             <p>{location.description}</p>
                             <p>{location.rating} rating</p>
                             {location.categories.map(category => (
-                                <p className="badge badge-neutral">
+                                <p key={category} className="badge badge-neutral">
                                     <em>{category} </em>
                                 </p>
                             ))}
